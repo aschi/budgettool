@@ -20,7 +20,6 @@ local.properties
 .project
 
 #PHP
-.settings
 .buildpath
 
 .metadata
