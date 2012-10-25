@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
+
+public class Gebastel {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try {
+			URL url = new URL("http://aschi.org:80/budgettool/");
+			URLConnection conn;
+
+			conn = url.openConnection();
+			
+		
+			
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setRequestProperty("Content-Type", "application/json");
+			
+			BufferedWriter out = new BufferedWriter(new PrintWriter(
+					conn.getOutputStream()));
+
+			String o = "{'name':'hallo'}";
+			out.write(o);
+			out.flush();
+		
+			BufferedReader r = new BufferedReader(new InputStreamReader(
+					conn.getInputStream()));
+
+			String line = null;
+			while ((line = r.readLine()) != null) {
+				// process each line in some way
+				System.out.println(line);
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}
