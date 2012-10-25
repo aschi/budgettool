@@ -6,6 +6,10 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
+import ch.zhaw.budgettool.JSONClasses.*;
+
+import com.google.gson.Gson;
+
 public class Gebastel {
 
 	/**
@@ -14,12 +18,16 @@ public class Gebastel {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
+			Gson gson = new Gson();
+			
+			
+			
 			URL url = new URL("http://aschi.org:80/budgettool/");
 			URLConnection conn;
 
 			conn = url.openConnection();
 			
-		
+			
 			
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
@@ -28,8 +36,7 @@ public class Gebastel {
 			BufferedWriter out = new BufferedWriter(new PrintWriter(
 					conn.getOutputStream()));
 
-			String o = "{'name':'hallo'}";
-			out.write(o);
+			out.write(gson.toJson(new LoginRequest("aschi", "password")));
 			out.flush();
 		
 			BufferedReader r = new BufferedReader(new InputStreamReader(
