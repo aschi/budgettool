@@ -53,7 +53,7 @@ class Session {
 
 		//get a new session id
 		do {
-			$sessionid = md5(time()+random(0, 32767));
+			$sessionid = md5(time()+rand(0, 32767));
 			$sql = "SELECT id from Session where sessionid = '".$sessionid."'";
 			$result = $pdo->query($sql);
 		} while($result->rowCount() != 0);
