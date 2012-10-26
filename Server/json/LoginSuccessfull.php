@@ -1,6 +1,5 @@
 <?php
 class LoginSuccessfull{
-	public $action = "Login Successfull";
 	public $username;
 	public $sessionid;
 	

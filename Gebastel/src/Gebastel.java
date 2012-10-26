@@ -27,8 +27,6 @@ public class Gebastel {
 
 			conn = url.openConnection();
 			
-			
-			
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
 			conn.setRequestProperty("Content-Type", "application/json");
@@ -42,12 +40,17 @@ public class Gebastel {
 			BufferedReader r = new BufferedReader(new InputStreamReader(
 					conn.getInputStream()));
 
+			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = r.readLine()) != null) {
 				// process each line in some way
-				System.out.println(line);
+				sb.append(line);
 			}
-
+			
+			LoginSuccessfull ls = gson.fromJson(sb.toString(), LoginSuccessfull.class);
+			System.out.println(ls);
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
