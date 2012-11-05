@@ -40,12 +40,15 @@ class Session {
 		
 		$sql = "SELECT id from Session where sessionid = '".$sessionid."'";
 		$result = $pdo->query($sql);
-		$row = $result->fetch(PDO::FETCH_ASSOC);
-		
-		$s = new Session($row['id']);
+		if($result->rowCount() != 1){
+			$row = $result->fetch(PDO::FETCH_ASSOC);
+			return new Session($row['id']);
+		}else{
+			return NULL;
+		}
 	}
 
-	public static function createSession($user){
+	public static function createFromUser($user){
 		$pdo = getPDO();
 			
 		$fk_user = $user->getId();

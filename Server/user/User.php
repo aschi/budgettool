@@ -33,11 +33,33 @@ class User{
 		$result = $pdo->query($sql);
 		
 		if($result->rowCount() == 1){
-			$session = Session::createSession(new User($result->fetchColumn(0)));
-			return new LoginSuccessfull($session->getUser()->getUsername(), $session->getSessionid());
+			$session = Session::createFromUser(new User($result->fetchColumn(0)));
+			return new LoginResponse("success", $session->getUser()->getUsername(), $session->getSessionid());
 		}else{
-			return new Error("Login failed!");
+			return new LoginRespone("failed", $username, "");
 		}		
+	}
+	
+	public static function create($username, $password, $email){
+		$pdo = getPDO();
+		
+		//check if username is unique
+		$sql = "SELECT id from User where username = '".$username."'";
+		$result = $pdo->query($sql);
+		if($result->rowCount() != 0){
+			return new CreateUserResponse("failed", "duplicate username", $username);
+		}
+
+		//check if email is unique
+		$sql = "SELECT id from User where email = '".$email."'";
+		$result = $pdo->query($sql);
+		if($result->rowCount() != 0){
+			return new CreateUserResponse("failed", "duplicate email", $username);
+		}
+		
+		//create user
+		$sql = "INSERT into User (username, password, email) VALUES ('".$username."','".md5($password)."','".$email."')";
+		return new CreateUserResponse("success", "successfully created", $username);
 	}
 }
 

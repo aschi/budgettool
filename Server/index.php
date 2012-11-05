@@ -17,5 +17,9 @@ switch($decoded->action){
 	case "LoginRequest":
 			print json_encode(User::login($decoded->username, $decoded->password));
 		break;
+	case "CreateUserRequest":
+			print json_encode(User::create($decoded->username, $decoded->password, $decoded->email));
+		break;
+		
 }
 ?>
