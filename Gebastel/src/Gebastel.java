@@ -6,7 +6,8 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-import ch.zhaw.budgettool.JSONClasses.*;
+import ch.zhaw.budgettool.JSONClasses.LoginRequest;
+import ch.zhaw.budgettool.JSONClasses.LoginResponse;
 
 import com.google.gson.Gson;
 
@@ -47,8 +48,8 @@ public class Gebastel {
 				sb.append(line);
 			}
 			
-			LoginSuccessfull ls = gson.fromJson(sb.toString(), LoginSuccessfull.class);
-			System.out.println(ls);
+			LoginResponse lr = gson.fromJson(sb.toString(), LoginResponse.class);
+			System.out.println(lr);
 			
 			
 		} catch (IOException e) {
