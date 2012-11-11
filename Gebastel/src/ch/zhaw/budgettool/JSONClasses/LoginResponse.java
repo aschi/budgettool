@@ -4,14 +4,14 @@ public class LoginResponse {
 
 	private String status;
 	private String username;
-	private String sessionId;
+	private String sessionid;
 	
 	
-	public LoginResponse(String status, String username, String sessionId) {
+	public LoginResponse(String status, String username, String sessionid) {
 		super();
 		this.status = status;
 		this.username = username;
-		this.sessionId = sessionId;
+		this.sessionid = sessionid;
 	}
 
 
@@ -25,15 +25,15 @@ public class LoginResponse {
 	}
 
 
-	public String getSessionId() {
-		return sessionId;
+	public String getSessionid() {
+		return sessionid;
 	}
 
 
 	@Override
 	public String toString() {
 		return "LoginResponse [status=" + status + ", username=" + username
-				+ ", sessionId=" + sessionId + "]";
+				+ ", sessionid=" + sessionid + "]";
 	}
 	
 	

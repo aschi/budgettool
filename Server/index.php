@@ -2,8 +2,8 @@
 require_once 'config.php';
 require_once 'user/User.php';
 require_once 'user/Session.php';
-require_once 'json/Error.php';
-require_once 'json/LoginSuccessfull.php';
+require_once 'json/LoginResponse.php';
+require_once 'json/CreateUserResponse.php';
 
 /*
  * $pdo->query($sql) 

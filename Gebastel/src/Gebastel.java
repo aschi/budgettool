@@ -48,6 +48,8 @@ public class Gebastel {
 				sb.append(line);
 			}
 			
+			System.out.println(sb.toString());
+			
 			LoginResponse lr = gson.fromJson(sb.toString(), LoginResponse.class);
 			System.out.println(lr);
 			
