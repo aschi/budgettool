@@ -28,7 +28,7 @@ public class AccountSettingsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_from_other_task);
+        setContentView(R.layout.view_change_settings);
 
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
     }
@@ -43,7 +43,7 @@ public class AccountSettingsActivity extends Activity {
     }
 
     public void onLaunchOtherTask(View v) {
-        Intent target = new Intent(this, OutsideTaskActivity.class)
+        Intent target = new Intent(this, GroupSettingsActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_TASK_ON_HOME);
         startActivity(target);

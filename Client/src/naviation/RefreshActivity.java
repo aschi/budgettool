@@ -32,7 +32,7 @@ public class RefreshActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notifications);
+//        setContentView(R.layout.notifications);
 
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
     }
@@ -54,9 +54,9 @@ public class RefreshActivity extends Activity {
                 .setContentText("This will open the content viewer")
                 .setAutoCancel(true)
                 .setContentIntent(TaskStackBuilder.from(this)
-                        .addParentStack(FalseGroupSettingsActivity.class)
-                        .addNextIntent(new Intent(this, FalseGroupSettingsActivity.class)
-                                .putExtra(FalseGroupSettingsActivity.EXTRA_TEXT, "From Notification"))
+                        .addParentStack(GroupSettingsActivity.class)
+                        .addNextIntent(new Intent(this, GroupSettingsActivity.class)
+                                .putExtra(GroupSettingsActivity.NFC_SERVICE, "From Notification"))
                         .getPendingIntent(0, 0));
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify("direct_tag", R.id.direct_notification, builder.getNotification());
@@ -70,7 +70,7 @@ public class RefreshActivity extends Activity {
                 .setContentText("This will show a detail page")
                 .setAutoCancel(true)
                 .setContentIntent(PendingIntent.getActivity(this, 0,
-                        new Intent(this, InterstitialMessageActivity.class)
+                        new Intent(this, GroupSettingsActivity.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                                         Intent.FLAG_ACTIVITY_CLEAR_TASK), 0));
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

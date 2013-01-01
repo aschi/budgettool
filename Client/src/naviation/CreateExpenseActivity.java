@@ -26,7 +26,7 @@ public class CreateExpenseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_up);
+        setContentView(R.layout.view_create_expense);
 
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
     }

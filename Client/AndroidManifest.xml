@@ -47,27 +47,6 @@
                        android:value="naviation.AppNavHomeActivity" />
         </activity>
 
-        <activity android:name="naviation.OutsideTaskActivity"
-                  android:label="@string/outside_task_label"
-                  android:theme="@style/Theme.Light"
-                  android:taskAffinity="com.example.android.appnavigation.outsidetask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name="naviation.FalseGroupSettingsActivity"
-                  android:label="@string/false_group_settings_label">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-                <data android:mimeType="application/x-example" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value="naviation.ContentCategoryActivity" />
-        </activity>
 
         <activity android:name="naviation.GroupSettingsActivity"
                   android:label="@string/group_settings_label">
@@ -88,17 +67,7 @@
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                        android:value="naviation.AppNavHomeActivity" />
         </activity>
-
-        <activity android:name="navigation.InterstitialMessageActivity"
-                  android:label="@string/interstitial_label"
-                  android:theme="@style/Theme.Dialog"
-                  android:launchMode="singleTask"
-                  android:excludeFromRecents="true"
-                  android:taskAffinity="">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        
     </application>
 
 </manifest>

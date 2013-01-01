@@ -28,7 +28,7 @@ public class GroupSettingsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_category);
+        setContentView(R.layout.view_change_group_settings);
 
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
     }
@@ -42,7 +42,7 @@ public class GroupSettingsActivity extends Activity {
     }
 
     public void onViewContent(View v) {
-        Intent target = new Intent(this, FalseGroupSettingsActivity.class);
+        Intent target = new Intent(this, GroupSettingsActivity.class);
         startActivity(target);
     }
 }

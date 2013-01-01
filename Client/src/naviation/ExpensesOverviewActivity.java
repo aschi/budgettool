@@ -34,13 +34,13 @@ public class ExpensesOverviewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.peer);
+        setContentView(R.layout.view_expenses_overview);
 
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
 
         mPeerCount = getIntent().getIntExtra(EXTRA_PEER_COUNT, 0) + 1;
-        TextView tv = (TextView) findViewById(R.id.peer_counter);
-        tv.setText(getResources().getText(R.string.peer_count).toString() + mPeerCount);
+//        TextView tv = (TextView) findViewById(R.id.titleRow);
+//        tv.setText(getResources().getText(R.string.peer_count).toString() + mPeerCount);
     }
 
     @Override
