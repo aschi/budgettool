@@ -10,8 +10,13 @@ class User{
 	public function __construct($id) {
 		$this->pdo = getPDO();
 		$sql = "SELECT id, username, group_id from User where id = '".$id."'";
-		$row = $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+		$result = $this->pdo->query($sql);
 		
+		if($result->rowCount() != 1){
+			throw new NotFoundException();
+		}
+		
+		$row = $result->fetch(PDO::FETCH_ASSOC);
 		$this->id = $row['id'];
 		$this->username = $row['username'];
 		
@@ -27,14 +32,22 @@ class User{
 		return $this->username;
 	}
 	
+	public function getUserDetails(){
+		return new GetUserDetailsResponse("success", "", $this->username, $this->email);
+	}
+	
 	public static function login($username, $password){
 		$pdo = getPDO();
 		$sql = "SELECT id, password from User where username = '".htmlspecialchars($username)."' and password = '".md5($password)."'";
 		$result = $pdo->query($sql);
 		
 		if($result->rowCount() == 1){
-			$session = Session::createFromUser(new User($result->fetchColumn(0)));
-			return new LoginResponse("success", $session->getUser()->getUsername(), $session->getSessionid());
+			try{
+				$session = Session::createFromUser(new User($result->fetchColumn(0)));
+				return new LoginResponse("success", $session->getUser()->getUsername(), $session->getSessionid());
+			} catch (NotFoundException $unfe) {
+            	return new LoginRespone("failed", $username, "");
+        	}
 		}else{
 			return new LoginRespone("failed", $username, "");
 		}		

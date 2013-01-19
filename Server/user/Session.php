@@ -11,6 +11,11 @@ class Session {
 		$this->pdo = getPDO();
 		$sql = "SELECT id, fk_user, sessionid, validuntil from Session where id = '".$id."'";
 		$result = $this->pdo->query($sql);
+		
+		if($result->rowCount() !=1){
+			throw new NotFoundException();
+		}
+		
 		$row = $result->fetch(PDO::FETCH_ASSOC);
 
 		$this->id = $row['id'];
@@ -42,7 +47,11 @@ class Session {
 		$result = $pdo->query($sql);
 		if($result->rowCount() != 1){
 			$row = $result->fetch(PDO::FETCH_ASSOC);
-			return new Session($row['id']);
+			try{
+				return new Session($row['id']);
+			} catch (NotFoundException $unfe) {
+            	return NULL;
+        	}
 		}else{
 			return NULL;
 		}
@@ -63,7 +72,11 @@ class Session {
 		
 		$sql = "INSERT into Session (fk_user, sessionid, validuntil) VALUES ('".$fk_user."','".$sessionid."','".$validuntil."')";
 		$result = $pdo->query($sql);
-		return new Session($pdo->lastInsertId());
+		try{
+			return new Session($pdo->lastInsertId());
+		} catch (NotFoundException $unfe) {
+			return NULL;
+		}
 	}
 }
 
