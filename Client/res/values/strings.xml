@@ -51,6 +51,8 @@
     <string name="createAccountButtonLable">Create Account</string>
     <string name="newGroupLabel">Create new group</string>
     <string name="createGroupButtonLabel">Create Group</string>
+    <string name="login_name"></string>
+    <string name="login_password"></string>
     
 
 </resources>

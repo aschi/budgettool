@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.widget.EditText;
+import ch.zhaw.budgettool.R;
 import ch.zhaw.database.DatabaseHelper;
 
 public class StartActivity extends Activity {
@@ -17,7 +19,8 @@ public class StartActivity extends Activity {
 	    SQLiteOpenHelper database = new DatabaseHelper(this);
 	    SQLiteDatabase connection = database.getWritableDatabase();
 	    
-	    connection.execSQL("insert into users (serverId, username, password) values (1, \"prisi\", \"test\")");
+	    //TODO Pris: Test
+	    //connection.execSQL("insert into users (serverId, username, password) values (1, \"prisi\", \"test\")");
 	    Cursor user = connection.rawQuery("SELECT * FROM users ORDER BY id LIMIT 1", null);
 	    
 	    hasUser = user.getCount() > 0;
