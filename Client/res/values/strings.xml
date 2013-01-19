@@ -20,6 +20,7 @@
     <string name="change_group_settings">Change your group settings</string>
 
     <string name="refresh_label">Refresh</string>
+    <string name="logoutLabel">Logout</string>
     <string name="account_name">Name</string>
     <string name="account_forename">Forename</string>
     <string name="account_email">E-Mail</string>
@@ -36,6 +37,17 @@
     <string name="expense_amount_short">Amount</string>
     <string name="overview_total">Total</string>
     <string name="comment">Comment</string>
+    <string name="budget">Monthly Budget</string>
+    <string name="username">Username</string>
+    <string name="description">Description</string>
+    <string name="joinGroupLabel">Join a new Group</string>
+    <string name="groupName">Group Name</string>
+    <string name="groupPassword">Password of the group</string>
+    <string name="joinGroupButton">Join Group</string>
+    <string name="loginLabel">Login</string>
+    <string name="password">Password</string>
+    <string name="newAccount">New Account</string>
+    <string name="createAccountButtonLable">Create Account</string>
     
 
 </resources>

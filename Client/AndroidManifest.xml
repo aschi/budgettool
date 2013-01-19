@@ -9,6 +9,7 @@
 
     
         <application android:label="@string/app_name">
+            
         <activity android:name="naviation.AppNavHomeActivity"
                 android:label="@string/app_nav_home_label">
             <intent-filter>
@@ -45,6 +46,26 @@
             </intent-filter>
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                        android:value="naviation.AppNavHomeActivity" />
+        </activity>
+        
+        <activity android:name="naviation.JoinGroupAcitivity"
+            	  android:label="@string/joinGroupLabel">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value="naviation.AppNavHomeActivcity" />
+        </activity>
+        
+       <activity android:name="naviation.LogoutActivity"
+            	  android:label="@string/logoutLabel">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value="naviation.AppNavHomeActivcity" />
         </activity>
 
 
