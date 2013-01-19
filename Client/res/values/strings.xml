@@ -20,6 +20,7 @@
     <string name="change_group_settings">Change your group settings</string>
 
     <string name="refresh_label">Refresh</string>
+    <string name="leave_group_label">Leave group</string>
     <string name="logoutLabel">Logout</string>
     <string name="account_name">Name</string>
     <string name="account_forename">Forename</string>
@@ -48,6 +49,8 @@
     <string name="password">Password</string>
     <string name="newAccount">New Account</string>
     <string name="createAccountButtonLable">Create Account</string>
+    <string name="newGroupLabel">Create new group</string>
+    <string name="createGroupButtonLabel">Create Group</string>
     
 
 </resources>
