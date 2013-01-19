@@ -30,11 +30,12 @@
         android:text="@string/username" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/username_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName" >
+        android:inputType="textPersonName"
+        android:text="@string/login_name" >
 
         <requestFocus />
     </EditText>
@@ -46,11 +47,12 @@
         android:text="@string/account_password" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/userpassword_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="numberPassword" />
+        android:inputType="textPassword"
+        android:text="@string/login_password" />
 
     <Button
         android:layout_width="match_parent"

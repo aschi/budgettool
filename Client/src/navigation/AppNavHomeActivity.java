@@ -67,6 +67,7 @@ public class AppNavHomeActivity extends ListActivity {
 					&& !info.activityInfo.name
 							.equals("navigation.StartActivity")) {
 
+				//TODO Pris: test
 				boolean groupLeader = true;
 				boolean hasGroup = true;
 				// Falls Gruppe vorhanden

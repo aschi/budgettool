@@ -42,7 +42,7 @@ public class GroupSettingsActivity extends Activity {
     }
 
     public void onViewContent(View v) {
-        Intent target = new Intent(this, GroupSettingsActivity.class);
+        Intent target = new Intent(this, AppNavHomeActivity.class);
         startActivity(target);
     }
 }
