@@ -29,7 +29,13 @@ import android.widget.EditText;
 import ch.zhaw.budgettool.R;
 import ch.zhaw.database.DatabaseHelper;
 
+
 public class AccountSettingsActivity extends Activity {
+	
+	private int id = -1;
+	private String username = "";
+	private String password = "";
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +49,15 @@ public class AccountSettingsActivity extends Activity {
 	    
 	    if (user.getCount() > 0) {
 	    	user.moveToFirst();
+	    	id = user.getInt(0);
 	    	EditText mText; 
 	    	mText = (EditText) findViewById(R.id.username_value);
-	    	mText.setText(user.getString(3));
+	    	username = user.getString(3);
+	    	mText.setText(username);
 	    	EditText mText2; 
+	    	password = user.getString(4);
 	    	mText2 = (EditText) findViewById(R.id.userpassword_value);
-	    	mText2.setText(user.getString(4));
+	    	mText2.setText(password);
 	    }
 	    
 	    database.close();
@@ -66,6 +75,23 @@ public class AccountSettingsActivity extends Activity {
     }
 
     public void onLaunchOtherTask(View v) {
+    	
+	    SQLiteOpenHelper database = new DatabaseHelper(this);
+	    SQLiteDatabase connection = database.getWritableDatabase();
+    	EditText usernameText, passwordText; 
+    	usernameText = (EditText) findViewById(R.id.username_value);
+    	passwordText = (EditText) findViewById(R.id.userpassword_value);
+    	username = usernameText.getText().toString();
+    	password = passwordText.getText().toString();
+	    
+    	String sql = "UPDATE users SET username=\""+username+"\", password=\""+password+"\" WHERE id = "+id;
+	    connection.execSQL(sql);
+	    
+	    database.close();
+	    connection.close();
+    	
+    	//TODO Pris: Netz!!!
+	    
         Intent target = new Intent(this, AppNavHomeActivity.class);
         startActivity(target);
     }
