@@ -20,6 +20,9 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.zhaw.database.DatabaseHelper;
 
 /**
  * Home activity for app navigation code samples.
@@ -57,6 +62,8 @@ public class AppNavHomeActivity extends ListActivity {
 
 		ArrayList<SampleInfo> samples = new ArrayList<SampleInfo>();
 
+		boolean groupLeader = getIsGroupLeader();
+		boolean hasGroup = getHasGroup();
 		final int count = infos.size();
 		for (int i = 0; i < count; i++) {
 			final ResolveInfo info = infos.get(i);
@@ -67,9 +74,6 @@ public class AppNavHomeActivity extends ListActivity {
 					&& !info.activityInfo.name
 							.equals("navigation.StartActivity")) {
 
-				//TODO Pris: test
-				boolean groupLeader = true;
-				boolean hasGroup = true;
 				// Falls Gruppe vorhanden
 				if ((hasGroup && 
 						(!info.activityInfo.name.equals("navigation.JoinGroupActivity") && 
@@ -144,5 +148,45 @@ public class AppNavHomeActivity extends ListActivity {
 			return convertView;
 		}
 
+	}
+	
+	private boolean getHasGroup() {
+	    SQLiteOpenHelper database = new DatabaseHelper(this);
+	    SQLiteDatabase connection = database.getWritableDatabase();
+	    
+	    //TODO Pris: Test
+	    //connection.execSQL("insert into users (serverId, username, password) values (1, \"prisi\", \"test\")");
+	    Cursor user = connection.rawQuery("SELECT * FROM users ORDER BY id LIMIT 1", null);
+	    
+	    if (user.getCount() > 0) {
+	    	user.moveToFirst();
+	    	return user.getInt(2)  > 0;
+	    }
+	    
+	    database.close();
+	    user.close();
+	    connection.close();
+	    
+	    return false;
+	}
+	
+	private boolean getIsGroupLeader() {
+	    SQLiteOpenHelper database = new DatabaseHelper(this);
+	    SQLiteDatabase connection = database.getWritableDatabase();
+	    
+	    int id = -1;
+	    //TODO Pris: Test
+	    //connection.execSQL("insert into users (serverId, username, password) values (1, \"prisi\", \"test\")");
+	    Cursor user = connection.rawQuery("SELECT * FROM users ORDER BY id LIMIT 1", null);
+	    
+	    if (user.getCount() > 0) {
+	    	user.moveToFirst();
+	    	id = user.getInt(0);
+	    }
+	    
+	    Cursor group = connection.rawQuery("SELECT * FROM groups WHERE userId = " + id, null);
+
+	    
+	    return group.getCount() > 0;
 	}
 }

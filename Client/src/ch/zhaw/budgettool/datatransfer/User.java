@@ -36,17 +36,14 @@ public class User {
 		HttpPost req = new HttpPost(Configuration.basePath + "users/add");
 		req.setHeader(new Header() {
 			public String getValue() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			public String getName() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			public HeaderElement[] getElements() throws ParseException {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		});
