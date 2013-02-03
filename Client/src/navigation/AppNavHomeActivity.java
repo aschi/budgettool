@@ -39,9 +39,18 @@ import ch.zhaw.database.DatabaseHelper;
  * Home activity for app navigation code samples.
  */
 public class AppNavHomeActivity extends ListActivity {
+	
+
+    SQLiteOpenHelper database;
+    SQLiteDatabase connection;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+	    database = DatabaseHelper.getInstance(this);
+	    connection = database.getWritableDatabase();
+	    
 
 		setListAdapter(new SampleAdapter(querySampleActivities()));
 	}
@@ -151,8 +160,8 @@ public class AppNavHomeActivity extends ListActivity {
 	}
 	
 	private boolean getHasGroup() {
-	    SQLiteOpenHelper database = new DatabaseHelper(this);
-	    SQLiteDatabase connection = database.getWritableDatabase();
+		
+		boolean hasGroup = false;
 	    
 	    //TODO Pris: Test
 	    //connection.execSQL("insert into users (serverId, username, password) values (1, \"prisi\", \"test\")");
@@ -160,33 +169,46 @@ public class AppNavHomeActivity extends ListActivity {
 	    
 	    if (user.getCount() > 0) {
 	    	user.moveToFirst();
-	    	return user.getInt(2)  > 0;
+	    	hasGroup = user.getInt(2)  > 0;
 	    }
 	    
-	    database.close();
 	    user.close();
-	    connection.close();
 	    
-	    return false;
+	    return hasGroup;
 	}
 	
 	private boolean getIsGroupLeader() {
-	    SQLiteOpenHelper database = new DatabaseHelper(this);
-	    SQLiteDatabase connection = database.getWritableDatabase();
+		boolean isLeader = false;
 	    
 	    int id = -1;
 	    //TODO Pris: Test
-	    //connection.execSQL("insert into users (serverId, username, password) values (1, \"prisi\", \"test\")");
+//	    connection.execSQL("insert into users (serverId, username, password) values (1, \"prisi\", \"test\")");
 	    Cursor user = connection.rawQuery("SELECT * FROM users ORDER BY id LIMIT 1", null);
 	    
 	    if (user.getCount() > 0) {
 	    	user.moveToFirst();
-	    	id = user.getInt(0);
+	    	id = user.getInt(1);
 	    }
+	    
+	    user.close();
 	    
 	    Cursor group = connection.rawQuery("SELECT * FROM groups WHERE userId = " + id, null);
 
+	    isLeader = group.getCount() > 0;
+	    group.close();
 	    
-	    return group.getCount() > 0;
+	    return isLeader;
 	}
+	
+    @Override
+    protected void onDestroy() {
+    	
+//    	if (database != null) {
+//    		database.close();
+//    	}
+//    	if (connection != null) {
+//    		connection.close();
+//    	}
+	    super.onDestroy();
+    }
 }

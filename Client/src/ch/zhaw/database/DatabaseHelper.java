@@ -5,13 +5,23 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+	
+	private static DatabaseHelper instance;
 
 //	   private SQLiteDatabase db;
+	private DatabaseHelper databaseHelper = null;
 
 	   // Konstruktor
 	   public DatabaseHelper(Context activity) {
 	      super(activity, "budgetDatabase", null, 1); 
 //	      db = getWritableDatabase();
+	   }
+	   
+	   public static DatabaseHelper getInstance(Context activity) {
+		    if (DatabaseHelper.instance == null) {
+		    	DatabaseHelper.instance = new DatabaseHelper(activity);
+		      }
+		      return DatabaseHelper.instance;
 	   }
 
 	   @Override
@@ -33,6 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "serverId UNSIGNED INTEGER NOT NULL, " +
                     "userId INTEGER NOT NULL, " + 
                     "groupName VARCHAR(255) NOT NULL, " +
+                    "password VARCHAR(40) NOT NULL, " +
                     "budget decimal(10,2) NOT NULL)";
 	        System.out.println(sql);
 	        db.execSQL(sql); 
@@ -56,4 +67,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	                        int newVersion) {
 	      // auf Versionswechsel reagieren
 	   }
+	   
+//	   @Override
+//	   public synchronized void close() {
+//		   if (myDataBase != null) {
+//			   .close();
+//		   }
+//		   
+//		   super.close();
+//	   }
 	}

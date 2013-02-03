@@ -18,14 +18,20 @@ package navigation;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import ch.zhaw.budgettool.R;
+import ch.zhaw.database.DatabaseHelper;
 
 public class ExpensesOverviewActivity extends Activity {
+	
+    SQLiteOpenHelper database;
+    SQLiteDatabase connection;
+	
     private static final String EXTRA_PEER_COUNT =
             "com.example.android.appnavigation.EXTRA_PEER_COUNT";
 
@@ -34,6 +40,9 @@ public class ExpensesOverviewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        database = DatabaseHelper.getInstance(this);
+	    connection = database.getWritableDatabase();
         setContentView(R.layout.view_expenses_overview);
 
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
@@ -56,5 +65,17 @@ public class ExpensesOverviewActivity extends Activity {
         Intent target = new Intent(this, ExpensesOverviewActivity.class);
         target.putExtra(EXTRA_PEER_COUNT, mPeerCount);
         startActivity(target);
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	
+//    	if (database != null) {
+//    		database.close();
+//    	}
+//    	if (connection != null) {
+//    		connection.close();
+//    	}
+	    super.onDestroy();
     }
 }

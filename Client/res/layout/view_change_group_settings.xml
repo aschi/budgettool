@@ -24,13 +24,13 @@
               android:text="@string/change_group_settings" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/groupNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/group_name" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/groupNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10" >
@@ -39,34 +39,36 @@
     </EditText>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/groupPasswordView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/group_password" />
 
     <EditText
-        android:id="@+id/username_value2"
+        android:id="@+id/groupPasswordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/groupBudgetView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/budget" />
 
     <EditText
-        android:id="@+id/blabla"
+        android:id="@+id/monthlyBudgetText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="numberDecimal" />
     
-    <Button android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/save_settings"
-            android:onClick="onViewContent" />
+    <Button 
+        android:id="@+id/changeGroupButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/save_settings"
+        android:onClick="onViewContent" />
 </LinearLayout>

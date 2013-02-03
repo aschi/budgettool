@@ -36,14 +36,20 @@ public class AccountSettingsActivity extends Activity {
 	private String username = "";
 	private String password = "";
 	
+	private SQLiteOpenHelper database;
+	private SQLiteDatabase connection;
+	
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        database = DatabaseHelper.getInstance(this);
+	    connection = database.getWritableDatabase();
+	    
         setContentView(R.layout.view_change_settings);
 
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
-	    SQLiteOpenHelper database = new DatabaseHelper(this);
-	    SQLiteDatabase connection = database.getWritableDatabase();
 	    
 	    Cursor user = connection.rawQuery("SELECT * FROM users ORDER BY id LIMIT 1", null);
 	    
@@ -60,9 +66,19 @@ public class AccountSettingsActivity extends Activity {
 	    	mText2.setText(password);
 	    }
 	    
-	    database.close();
 	    user.close();
-	    connection.close();
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	
+//    	if (database != null) {
+//    		database.close();
+//    	}
+//    	if (connection != null) {
+//    		connection.close();
+//    	}
+	    super.onDestroy();
     }
 
     @Override
@@ -76,8 +92,6 @@ public class AccountSettingsActivity extends Activity {
 
     public void onLaunchOtherTask(View v) {
     	
-	    SQLiteOpenHelper database = new DatabaseHelper(this);
-	    SQLiteDatabase connection = database.getWritableDatabase();
     	EditText usernameText, passwordText; 
     	usernameText = (EditText) findViewById(R.id.username_value);
     	passwordText = (EditText) findViewById(R.id.userpassword_value);
@@ -86,10 +100,7 @@ public class AccountSettingsActivity extends Activity {
 	    
     	String sql = "UPDATE users SET username=\""+username+"\", password=\""+password+"\" WHERE id = "+id;
 	    connection.execSQL(sql);
-	    
-	    database.close();
-	    connection.close();
-    	
+
     	//TODO Pris: Netz!!!
 	    
         Intent target = new Intent(this, AppNavHomeActivity.class);

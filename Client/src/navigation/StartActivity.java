@@ -6,28 +6,26 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.widget.EditText;
-import ch.zhaw.budgettool.R;
 import ch.zhaw.database.DatabaseHelper;
 
 public class StartActivity extends Activity {
+	
+    SQLiteOpenHelper database;
+    SQLiteDatabase connection;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+	    database = DatabaseHelper.getInstance(this);
+	    connection = database.getWritableDatabase();
+	    
 		
 		boolean hasUser = false;
-	    
-	    SQLiteOpenHelper database = new DatabaseHelper(this);
-	    SQLiteDatabase connection = database.getWritableDatabase();
 	    
 	    //TODO Pris: Test
 	    //connection.execSQL("insert into users (serverId, username, password) values (1, \"prisi\", \"test\")");
 	    Cursor user = connection.rawQuery("SELECT * FROM users ORDER BY id LIMIT 1", null);
 	    
 	    hasUser = user.getCount() > 0;
-	    
-	    database.close();
-	    user.close();
-	    connection.close();
 	    
 	    super.onCreate(savedInstanceState);
 	    Intent intent;
@@ -41,4 +39,16 @@ public class StartActivity extends Activity {
 	    finish();
 	    // note we never called setContentView()
 	}
+	
+    @Override
+    protected void onDestroy() {
+    	
+//    	if (database != null) {
+//    		database.close();
+//    	}
+//    	if (connection != null) {
+//    		connection.close();
+//    	}
+	    super.onDestroy();
+    }
 }
