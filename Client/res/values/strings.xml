@@ -54,6 +54,7 @@
     <string name="login_name"></string>
     <string name="login_password"></string>
     <string name="fuerkiri">Für Kiri</string>
+    <string name="date"></string>
     
 
 </resources>
