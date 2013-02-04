@@ -44,50 +44,13 @@ public class RefreshActivity extends Activity {
     	database = DatabaseHelper.getInstance(this);
 	    connection = database.getWritableDatabase();
 	    
-        
-//        setContentView(R.layout.notifications);
 
+    	//TODO Pris: Alles mit Server synchronisieren
+	    
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void onPostDirect(View v) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setTicker("Direct Notification")
-                .setSmallIcon(android.R.drawable.stat_notify_chat)
-                .setContentTitle("Direct Notification")
-                .setContentText("This will open the content viewer")
-                .setAutoCancel(true)
-                .setContentIntent(TaskStackBuilder.from(this)
-                        .addParentStack(GroupSettingsActivity.class)
-                        .addNextIntent(new Intent(this, GroupSettingsActivity.class)
-                                .putExtra(GroupSettingsActivity.NFC_SERVICE, "From Notification"))
-                        .getPendingIntent(0, 0));
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.notify("direct_tag", R.id.direct_notification, builder.getNotification());
-    }
-
-    public void onPostInterstitial(View v) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setTicker("Interstitial Notification")
-                .setSmallIcon(android.R.drawable.stat_notify_chat)
-                .setContentTitle("Interstitial Notification")
-                .setContentText("This will show a detail page")
-                .setAutoCancel(true)
-                .setContentIntent(PendingIntent.getActivity(this, 0,
-                        new Intent(this, GroupSettingsActivity.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                                        Intent.FLAG_ACTIVITY_CLEAR_TASK), 0));
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.notify("interstitial_tag", R.id.interstitial_notification, builder.getNotification());
+        
+        Intent target = new Intent(this, AppNavHomeActivity.class);
+        startActivity(target);
     }
     
     @Override

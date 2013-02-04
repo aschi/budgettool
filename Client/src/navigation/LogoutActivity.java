@@ -41,15 +41,6 @@ public class LogoutActivity extends Activity {
         Intent target = new Intent(this, StartActivity.class);
         startActivity(target);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     
     @Override
     protected void onDestroy() {

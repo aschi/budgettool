@@ -10,13 +10,13 @@
         android:text="@string/joinGroupLabel" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/joinGroupnameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/groupName" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/joinGroupnameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10" >
@@ -25,19 +25,20 @@
     </EditText>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/joinGroupPasswordView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/groupPassword" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/joinGroupPasswordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword" />
 
     <Button
+        android:id="@+id/joinGroupButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

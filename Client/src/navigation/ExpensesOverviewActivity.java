@@ -16,14 +16,19 @@
 
 package navigation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
-import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import ch.zhaw.budgettool.R;
 import ch.zhaw.database.DatabaseHelper;
 
@@ -31,11 +36,11 @@ public class ExpensesOverviewActivity extends Activity {
 	
     SQLiteOpenHelper database;
     SQLiteDatabase connection;
-	
-    private static final String EXTRA_PEER_COUNT =
-            "com.example.android.appnavigation.EXTRA_PEER_COUNT";
+    
+    private String userIdsString;
 
-    private int mPeerCount;
+
+    private List<String> valueList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,25 +51,81 @@ public class ExpensesOverviewActivity extends Activity {
         setContentView(R.layout.view_expenses_overview);
 
         ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
+        userIdsString = getUserIds();
+        
+        //titles
+        valueList.add("Description, Amount, Date, Username");
+        
+	    Cursor expense = connection.rawQuery("SELECT * FROM expenses WHERE userId IN " + userIdsString + ";", null);
+	    
+	    if (expense != null ) {
+	        if  (expense.moveToFirst()) {
+	            do {
+	            	String username = getUsername(expense.getInt(2));
+	            	valueList.add(expense.getString(3) + ", " + expense.getDouble(4) + ", " + expense.getString(5) + ", " + username);
+	            }while (expense.moveToNext());
+	        }
+	    }
 
-        mPeerCount = getIntent().getIntExtra(EXTRA_PEER_COUNT, 0) + 1;
-//        TextView tv = (TextView) findViewById(R.id.titleRow);
-//        tv.setText(getResources().getText(R.string.peer_count).toString() + mPeerCount);
+	    expense.close();
+        
+        ListAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_expandable_list_item_1, valueList);
+       
+        final ListView lv = (ListView)findViewById(R.id.expenseOverviewList);
+
+        lv.setAdapter(adapter);
+
+
     }
+    
+    
+	private String getUserIds() {
+		
+		String userIds = "(";
+	    
+	    Cursor user = connection.rawQuery("SELECT * FROM users ORDER BY id LIMIT 1", null);
+	    boolean first = true;
+	    if (user != null ) {
+	        if  (user.moveToFirst()) {
+	            do {
+	            	if (!first) {
+	            		userIds = userIds + ", ";
+	            	}
+	            	userIds =userIds + user.getInt(2);
+	            	first = false;
+	            }while (user.moveToNext());
+	        }
+	    }
+	    
+	    user.close();
+	    userIds = userIds + ")";
+	    
+	    return userIds;
+	}
+	
+	private String getUsername(int userId) {
+		
+		String username = "";
+	    
+	    Cursor user = connection.rawQuery("SELECT * FROM users WHERE serverId = " + userId, null);
+	    
+	    if (user.getCount() > 0) {
+	    	user.moveToFirst();
+	    	username = user.getString(3);
+	    }
+	    
+	    user.close();
+	    
+	    return username;
+	}
+	
 
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onLaunchPeer(View v) {
-        Intent target = new Intent(this, ExpensesOverviewActivity.class);
-        target.putExtra(EXTRA_PEER_COUNT, mPeerCount);
-        startActivity(target);
     }
     
     @Override
