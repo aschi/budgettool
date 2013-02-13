@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/maintable"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="wrap_content"
+        android:background="#ff00f0"
+        android:stretchColumns="0,1,2,3" >
+    </TableLayout>
 
-        <ListView
-            android:id="@+id/expenseOverviewList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
-        </ListView>
-
-    </LinearLayout>
+</ScrollView>
