@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpHost;
@@ -47,18 +49,17 @@ public class Expense implements TransferClass{
 		this.description = description;
 		this.value = value;
 		this.date = date;
-		
 		try {
 			HttpPost req = ConnectionUtilities.getPostRequest("expenses/add", null, this.user.getUsername(), this.user.getPassword());
 			
 			//add content
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 			nameValuePairs.add(new BasicNameValuePair("data[Expense][description]",
-					description));
+					this.description));
 			nameValuePairs.add(new BasicNameValuePair("data[Expense][value]",
-					Double.toString(value)));
+					Double.toString(this.value)));
 			nameValuePairs.add(new BasicNameValuePair("data[Expense][date]",
-					date));
+					this.date));
 
 			req.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpclient.execute(target, req);
@@ -73,7 +74,7 @@ public class Expense implements TransferClass{
 			while ((line = rd.readLine()) != null) {
 				sb.append(line);
 			}
-			
+		
 			ExpenseData data = gson.fromJson(sb.toString(), ExpenseData.class);
 			this.id = Integer.parseInt(data.getExpense().getExpense().getId());
 			this.userId = Integer.parseInt(data.getExpense().getUser().getId());

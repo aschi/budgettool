@@ -25,6 +25,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -110,7 +111,8 @@ public class ExpensesOverviewActivity extends Activity {
 				descriptionTitle.setText("Description");
 				amountTitle.setText("Amount");
 				dateTitle.setText("Date");
-				usernameTitle.setText("Username");
+				usernameTitle.setText("User");
+				usernameTitle.setGravity(Gravity.RIGHT);
 				
 				header.addView(descriptionTitle);
 				header.addView(amountTitle);
@@ -124,11 +126,11 @@ public class ExpensesOverviewActivity extends Activity {
 				do {
 					TableRow row = new TableRow(this);
 					TextView description = new TextView(this);
-					description.setText(expense.getString(3));
+					description.setText(expense.getString(expense.getColumnIndex("description")));
 					row.addView(description, ViewGroup.LayoutParams.FILL_PARENT, 35);
 					
 					TextView amount = new TextView(this);
-					amount.setText(expense.getDouble(4) + "");
+					amount.setText(expense.getDouble(expense.getColumnIndex("value")) + "");
 					row.addView(amount, ViewGroup.LayoutParams.FILL_PARENT, 35);
 					
 					TextView date = new TextView(this);
@@ -136,8 +138,9 @@ public class ExpensesOverviewActivity extends Activity {
 					row.addView(date, ViewGroup.LayoutParams.FILL_PARENT, 35);
 					
 					TextView usernameText = new TextView(this);
-					String username = getUsername(expense.getInt(2));
+					String username = getUsername(expense.getInt(expense.getColumnIndex("userId")));
 					usernameText.setText(username);
+					usernameText.setGravity(Gravity.RIGHT);
 					row.addView(usernameText, ViewGroup.LayoutParams.FILL_PARENT, 35);
 					
 					table.addView(row, ViewGroup.LayoutParams.FILL_PARENT, 35);
@@ -156,7 +159,7 @@ public class ExpensesOverviewActivity extends Activity {
 		String userIds = "(";
 
 		Cursor user = connection.rawQuery(
-				"SELECT * FROM users ORDER BY id LIMIT 1", null);
+				"SELECT * FROM users ORDER BY serverId LIMIT 1", null);
 		boolean first = true;
 		if (user != null) {
 			if (user.moveToFirst()) {
@@ -164,7 +167,7 @@ public class ExpensesOverviewActivity extends Activity {
 					if (!first) {
 						userIds = userIds + ", ";
 					}
-					userIds = userIds + user.getInt(2);
+					userIds = userIds + user.getInt(user.getColumnIndex("serverId"));
 					first = false;
 				} while (user.moveToNext());
 			}

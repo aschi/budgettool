@@ -17,6 +17,7 @@
 package navigation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,11 +30,22 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import ch.zhaw.budgettool.R;
+import ch.zhaw.budgettool.datatransfer.Expense;
+import ch.zhaw.budgettool.datatransfer.Group;
+import ch.zhaw.budgettool.datatransfer.TransferClass;
+import ch.zhaw.budgettool.datatransfer.User;
+import ch.zhaw.budgettool.datatransfer.tasks.CreateExpenseTask;
+import ch.zhaw.budgettool.datatransfer.tasks.CreateGroupTask;
+import ch.zhaw.budgettool.datatransfer.tasks.EditGroupTask;
+import ch.zhaw.budgettool.datatransfer.tasks.LoginTask;
+import ch.zhaw.budgettool.datatransfer.tasks.OnTaskCompleted;
 import ch.zhaw.database.DatabaseHelper;
+import ch.zhaw.database.UserManagementHelper;
 
-public class GroupSettingsActivity extends Activity {
+public class GroupSettingsActivity extends Activity implements OnTaskCompleted {
 	
 	private int id = -1;
+	private int serverId = -1;
 	private String groupName = "";
 	private String password = "";
 	private double monthlyBudget = 0;
@@ -41,6 +53,11 @@ public class GroupSettingsActivity extends Activity {
 	
     SQLiteOpenHelper database;
     SQLiteDatabase connection;
+    
+    private UserManagementHelper umh;
+    private User user;
+    private Group group;
+    
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +67,9 @@ public class GroupSettingsActivity extends Activity {
         database = DatabaseHelper.getInstance(this);
 	    connection = database.getWritableDatabase();
 
+	    umh = new UserManagementHelper(connection);
+	    user = umh.getUserFromDb(this);
+	    
         setContentView(R.layout.view_change_group_settings);
         
         Button changeGroupButton = (Button) findViewById(R.id.changeGroupButton);
@@ -60,6 +80,7 @@ public class GroupSettingsActivity extends Activity {
 	    
 	    if (group.getCount() > 0) {
 	    	group.moveToFirst();
+	    	serverId = group.getInt(group.getColumnIndex("serverId"));
 	    	id = group.getInt(0);
 	    	EditText mText; 
 	    	mText = (EditText) findViewById(R.id.groupNameText);
@@ -88,14 +109,8 @@ public class GroupSettingsActivity extends Activity {
 		    	password = passwordgroupText.getText().toString();
 		    	monthlyBudget = Double.parseDouble(monthlyBudgetText.getText().toString());
 			    
-		    	String sql = "UPDATE groups SET groupName=\""+groupName+"\", password=\""+password+"\", budget="+monthlyBudget+" WHERE id = "+id;
-			    connection.execSQL(sql);
-
-		    	
-		    	//TODO Pris: Netz!!!
-			    
-		        Intent target = new Intent(GroupSettingsActivity.this, AppNavHomeActivity.class);
-		        startActivity(target);
+		    	//check login & initiate data transfer
+				new LoginTask(user, GroupSettingsActivity.this).execute(user.getUsername(), user.getPassword());
 			}
 		});
     }
@@ -119,4 +134,35 @@ public class GroupSettingsActivity extends Activity {
 //    	}
 	    super.onDestroy();
     }
+
+	public void onTaskCompleted(Class task, TransferClass obj) {
+		if(task == LoginTask.class){
+			if(obj == null){
+				//username / password invalid -> logout
+				umh.logoutFromDB(this);
+			}else{
+				//create expense
+				user = (User)obj;
+				group = new Group(user);
+				group.setId(serverId);
+				
+				new EditGroupTask(group, this).execute(groupName, password, Double.toString(monthlyBudget));
+			}
+		}else if(task == EditGroupTask.class){
+			if(obj != null){
+				group = (Group)obj;
+				
+				String sql = "UPDATE groups SET groupName=\""+groupName+"\", password=\""+password+"\", budget="+monthlyBudget+" WHERE id = "+id;
+			    connection.execSQL(sql);
+			    
+		        Intent target = new Intent(GroupSettingsActivity.this, AppNavHomeActivity.class);
+		        startActivity(target);
+			}else{
+	    		AlertDialog.Builder builder = new AlertDialog.Builder(GroupSettingsActivity.this);
+	    		builder.setMessage(R.string.editgroupfailed);
+	    		AlertDialog dialog = builder.create();
+	    		dialog.show();
+			}
+		}
+	}
 }

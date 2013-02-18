@@ -121,7 +121,7 @@ public class CreateExpenseActivity extends Activity implements OnTaskCompleted{
 				int month = Integer.parseInt(dateText.substring(dateText.indexOf("/") + 1,dateText.indexOf("/", dateText.indexOf("/") + 1)));
 				int year = Integer.parseInt(dateText.substring(dateText.indexOf("/", dateText.indexOf("/", dateText.indexOf("/") + 1)) + 1,dateText.indexOf("/", dateText.indexOf("/", dateText.indexOf("/") + 1)) + 5));
 				Calendar cal = new GregorianCalendar(year, month -1 , day);
-				SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		        date = df.format(cal.getTime());
 
 		        //check login
@@ -162,18 +162,18 @@ public class CreateExpenseActivity extends Activity implements OnTaskCompleted{
 				//username / password invalid -> logout
 				umh.logoutFromDB(this);
 			}else{
-				//update everything
+				//create expense
 				user = (User)obj;
 				expense = new Expense(user);
 				new CreateExpenseTask(expense, this).execute(description, Double.toString(amount), date);
 			}
-		}else if(task == UpdateEverythingTask.class){
+		}else if(task == CreateExpenseTask.class){
 			if(obj != null){
 				expense = (Expense)obj;
 				
 				String sql = "INSERT INTO expenses (serverId, userId, description, value, date) VALUES("
 						+ expense.getId()
-						+ ", \""
+						+ ", "
 						+ expense.getUserId()
 						+ ", \""
 						+ expense.getDescription()

@@ -187,7 +187,7 @@ public class AppNavHomeActivity extends ListActivity {
 	    
 	    if (user.getCount() > 0) {
 	    	user.moveToFirst();
-	    	id = user.getInt(1);
+	    	id = user.getInt(user.getColumnIndex("serverId"));
 	    }
 	    
 	    user.close();
