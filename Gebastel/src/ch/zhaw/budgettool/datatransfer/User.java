@@ -23,7 +23,7 @@ import ch.zhaw.budgettool.datatransfer.JSONClasses.UserData;
 
 import com.google.gson.Gson;
 
-public class User implements TransferClass{
+public class User {
 	private DefaultHttpClient httpclient;
 	private HttpHost target;
 	private Gson gson;
@@ -207,9 +207,7 @@ public class User implements TransferClass{
 			UserData data = gson.fromJson(sb.toString(), UserData.class);
 			this.id = Integer.parseInt(data.getUser().getUser().getId());
 			return data;
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (AuthenticationException e){
+		} catch (IOException | AuthenticationException e) {
 			e.printStackTrace();
 		}
 		

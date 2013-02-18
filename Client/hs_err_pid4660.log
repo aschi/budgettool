@@ -1,0 +1,109 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (javaClasses.cpp:129), pid=4660, tid=2552
+#  fatal error: Invalid layout of preloaded class
+#
+# JRE version: 7.0_13-b20
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (23.7-b01 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000000020fc800):  JavaThread "Unknown thread" [_thread_in_vm, id=2552, stack(0x0000000002490000,0x0000000002590000)]
+
+Stack: [0x0000000002490000,0x0000000002590000]
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x00000000020fc800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=2552, stack(0x0000000002490000,0x0000000002590000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.008 loading class 0x00000000021b88a0 done
+Event: 0.008 loading class 0x0000000002172270 done
+Event: 0.008 loading class 0x0000000002172240
+Event: 0.008 loading class 0x00000000021c4470
+Event: 0.008 loading class 0x00000000021c4470 done
+Event: 0.008 loading class 0x00000000021c44b0
+Event: 0.008 loading class 0x00000000021c44b0 done
+Event: 0.008 loading class 0x000000001126ca30
+Event: 0.008 loading class 0x000000001126ca30 done
+Event: 0.008 loading class 0x0000000002172240 done
+
+
+Dynamic libraries:
+0x000000013fbd0000 - 0x000000013fc03000 	C:\Program Files\Java\jre7\bin\javaw.exe
+0x0000000077b00000 - 0x0000000077cac000 	C:\Windows\SYSTEM32\ntdll.dll
+0x0000000077790000 - 0x00000000778af000 	C:\Windows\system32\kernel32.dll
+0x000007fefe0c0000 - 0x000007fefe12c000 	C:\Windows\system32\KERNELBASE.dll
+0x000007feff8b0000 - 0x000007feff98b000 	C:\Windows\system32\ADVAPI32.dll
+0x000007feff810000 - 0x000007feff8af000 	C:\Windows\system32\msvcrt.dll
+0x000007fefe790000 - 0x000007fefe7af000 	C:\Windows\SYSTEM32\sechost.dll
+0x000007fefe660000 - 0x000007fefe78e000 	C:\Windows\system32\RPCRT4.dll
+0x0000000077a00000 - 0x0000000077afa000 	C:\Windows\system32\USER32.dll
+0x000007fefe5f0000 - 0x000007fefe657000 	C:\Windows\system32\GDI32.dll
+0x000007feffa30000 - 0x000007feffa3e000 	C:\Windows\system32\LPK.dll
+0x000007feffae0000 - 0x000007feffbaa000 	C:\Windows\system32\USP10.dll
+0x000007fefc900000 - 0x000007fefcaf4000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7600.16661_none_fa62ad231704eab7\COMCTL32.dll
+0x000007feffa60000 - 0x000007feffad1000 	C:\Windows\system32\SHLWAPI.dll
+0x000007fefe8a0000 - 0x000007fefe8ce000 	C:\Windows\system32\IMM32.DLL
+0x000007fefe970000 - 0x000007fefea79000 	C:\Windows\system32\MSCTF.dll
+0x000007fefdf30000 - 0x000007fefdf70000 	C:\Windows\system32\nvinitx.dll
+0x000000005e530000 - 0x000000005e601000 	C:\Program Files\Java\jre7\bin\msvcr100.dll
+0x000000005d040000 - 0x000000005d75f000 	C:\Program Files\Java\jre7\bin\server\jvm.dll
+0x000007feeddb0000 - 0x000007feeddb9000 	C:\Windows\system32\WSOCK32.dll
+0x000007fefe340000 - 0x000007fefe38d000 	C:\Windows\system32\WS2_32.dll
+0x000007fefe890000 - 0x000007fefe898000 	C:\Windows\system32\NSI.dll
+0x000007fefaf90000 - 0x000007fefafcb000 	C:\Windows\system32\WINMM.dll
+0x0000000077cc0000 - 0x0000000077cc7000 	C:\Windows\system32\PSAPI.DLL
+0x000000005e6e0000 - 0x000000005e6ef000 	C:\Program Files\Java\jre7\bin\verify.dll
+0x000000005e6b0000 - 0x000000005e6d8000 	C:\Program Files\Java\jre7\bin\java.dll
+0x000000005e690000 - 0x000000005e6a5000 	C:\Program Files\Java\jre7\bin\zip.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=Cp1252 -Xbootclasspath:C:\Users\aschi\AppData\Local\Android\android-sdk\platforms\android-15\android.jar 
+java_command: ch.zhaw.budgettool.datatransfer.Test
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x86;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x64
+USERNAME=aschi
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 42 Stepping 7, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 , 64 bit Build 7600 
+
+CPU:total 8 (4 cores per cpu, 2 threads per core) family 6 model 42 stepping 7, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, ht, tsc, tscinvbit
+
+Memory: 4k page, physical 16692344k(12498992k free), swap 33382788k(27942924k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (23.7-b01) for windows-amd64 JRE (1.7.0_13-b20), built on Jan 30 2013 10:10:00 by "java_re" with unknown MS VC++:1600
+
+time: Thu Feb 07 18:10:49 2013
+elapsed time: 0 seconds
+

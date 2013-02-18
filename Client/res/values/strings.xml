@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_name">BudgetTool</string>
     <string name="menu_settings">Settings</string>
 
@@ -55,6 +54,7 @@
     <string name="login_password"></string>
     <string name="fuerkiri">Für Kiri</string>
     <string name="date"></string>
+    <string name="loginfailed">Login failed</string>
+    <string name="usercreationfailed">User creation failed</string>
     
-
 </resources>
