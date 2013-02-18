@@ -10,12 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import ch.zhaw.budgettool.R;
+import ch.zhaw.budgettool.datatransfer.Group;
 import ch.zhaw.budgettool.datatransfer.TransferClass;
 import ch.zhaw.budgettool.datatransfer.User;
 import ch.zhaw.budgettool.datatransfer.tasks.CreateUserTask;
 import ch.zhaw.budgettool.datatransfer.tasks.LoginTask;
 import ch.zhaw.budgettool.datatransfer.tasks.OnTaskCompleted;
+import ch.zhaw.budgettool.datatransfer.tasks.UpdateEverythingTask;
 import ch.zhaw.database.DatabaseHelper;
+import ch.zhaw.database.UpdateHelper;
 
 public class LoginActivity extends Activity implements OnTaskCompleted{
 	
@@ -92,8 +95,17 @@ public class LoginActivity extends Activity implements OnTaskCompleted{
 					groupId = u.getData().getUser().getUser().getGroup_id();
 				}
 				
+				
 			    String sql = "INSERT INTO users (serverId, groupId, username, password) VALUES(" + serverId + ", "+ groupId +", \"" + username + "\", \"" + password + "\");";
 				connection.execSQL(sql);
+				
+				if(groupId != "NULL"){
+					//get serverdata
+					UpdateHelper uh = new UpdateHelper(connection);
+					Group group = new Group(u);
+					group.setId(Integer.parseInt(groupId));
+					new UpdateEverythingTask(group, uh, this).execute();
+				}
 				
 				Intent target = new Intent(LoginActivity.this, StartActivity.class);
 			    startActivity(target);

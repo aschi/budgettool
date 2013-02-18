@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import ch.zhaw.database.DatabaseHelper;
+import ch.zhaw.database.UserManagementHelper;
 
 public class LogoutActivity extends Activity {
 	
@@ -21,13 +22,13 @@ public class LogoutActivity extends Activity {
     	database = DatabaseHelper.getInstance(this);
 	    connection = database.getWritableDatabase();
 	    
-        
-//        setContentView(R.layout.view_join_group);
-
-
-    	//TODO Pris: Alles auf Server laden 
+	    UserManagementHelper umh = new UserManagementHelper(connection);
 	    
-    	
+	    //TODO Pris: Alles auf Server laden 
+	    
+	    
+	    //logout
+	    umh.logoutFromDB(this);
     }
     
     @Override

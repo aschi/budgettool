@@ -9,15 +9,20 @@ import android.database.sqlite.SQLiteDatabase;
 import ch.zhaw.budgettool.datatransfer.User;
 
 public class UserManagementHelper{
+	SQLiteDatabase connection;
 	
-	public User getUserFromDb(SQLiteDatabase connection, Activity activity){
+	public UserManagementHelper(SQLiteDatabase connection){
+		this.connection = connection;
+	}
+	
+	public User getUserFromDb(Activity activity){
 		   	Cursor user = connection.rawQuery("SELECT id, username, password FROM users ORDER BY id LIMIT 1", null);
 	 	    User u = null;
 		   	
 	 	    if (user.getCount() > 0) {
 	 	    	user.moveToFirst();
 		    	String username = user.getString(user.getColumnIndex("username"));
-		    	String password = user.getString(user.getColumnIndex("username"));
+		    	String password = user.getString(user.getColumnIndex("password"));
                 int id = user.getInt(user.getColumnIndex("id"));
                 
                 u = new User();
@@ -31,7 +36,7 @@ public class UserManagementHelper{
 	    	return u;
 	}
 
-	public void logoutFromDB(SQLiteDatabase connection, Activity activity){
+	public void logoutFromDB(Activity activity){
 		String sql = "DELETE FROM users;"; 
 	    connection.execSQL(sql);
 	    

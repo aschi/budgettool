@@ -39,7 +39,7 @@ public class CreateGroupActivity extends Activity implements OnTaskCompleted{
         
         database = DatabaseHelper.getInstance(this);
 	    connection = database.getWritableDatabase();
-	    umh = new UserManagementHelper();
+	    umh = new UserManagementHelper(connection);
 	    
         setContentView(R.layout.view_create_group);
 
@@ -50,7 +50,7 @@ public class CreateGroupActivity extends Activity implements OnTaskCompleted{
         createButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				user = umh.getUserFromDb(connection, CreateGroupActivity.this);
+				user = umh.getUserFromDb(CreateGroupActivity.this);
 				
 		    	EditText groupNameText, passwordText, budgetText; 
 		    	groupNameText = (EditText) findViewById(R.id.createGroupnameText);
@@ -62,22 +62,6 @@ public class CreateGroupActivity extends Activity implements OnTaskCompleted{
 		    	budget = Double.parseDouble(budgetText.getText().toString());
 		    	
 		    	new LoginTask(user, CreateGroupActivity.this).execute(user.getUsername(), user.getPassword());
-		    	
-		    	
-		    	//Prüfen ob Gruppenname bereits vorhanden
-		    	//TODO Pris: Netz 
-		    	
-		    	//Server-ID holen
-		    	serverId = 999;
-			    
-		    	String sql = "INSERT INTO groups (serverId, userId, groupname, password, budget) VALUES(" + serverId + ", " + userId + ", \"" + groupName + "\", \"" + password + "\", " + budget + ");";
-			    connection.execSQL(sql);
-			    
-			    String sql2 = "UPDATE users SET groupId = " + serverId + " WHERE serverId = " + userId + ";";
-			    connection.execSQL(sql2);
-			    
-		        Intent target = new Intent(CreateGroupActivity.this, AppNavHomeActivity.class);
-		        startActivity(target);
 			}
 
         });
@@ -104,8 +88,9 @@ public class CreateGroupActivity extends Activity implements OnTaskCompleted{
 		if(task == LoginTask.class){
 			if(obj == null){
 				//username / password invalid -> logout
-				umh.logoutFromDB(connection, this);
+				umh.logoutFromDB(this);
 			}else{
+				this.user = (User)obj;
 				createGroup(user, groupName, password, budget);
 			}
 		}else if(task == CreateGroupTask.class){

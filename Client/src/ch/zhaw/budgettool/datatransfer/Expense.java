@@ -31,6 +31,8 @@ public class Expense implements TransferClass{
 	private String date;
 	private int id;
 	private User user;
+	private int userId;
+	private ExpenseData data;
 	
 	public Expense(User user) {
 		this.user = user;
@@ -74,6 +76,8 @@ public class Expense implements TransferClass{
 			
 			ExpenseData data = gson.fromJson(sb.toString(), ExpenseData.class);
 			this.id = Integer.parseInt(data.getExpense().getExpense().getId());
+			this.userId = Integer.parseInt(data.getExpense().getUser().getId());
+			this.data = data;
 			return data;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -133,5 +137,17 @@ public class Expense implements TransferClass{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public ExpenseData getData() {
+		return data;
 	}
 }
