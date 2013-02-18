@@ -7,7 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -19,6 +18,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import ch.zhaw.budgettool.datatransfer.JSONClasses.Available;
 import ch.zhaw.budgettool.datatransfer.JSONClasses.UserData;
 
 import com.google.gson.Gson;
@@ -28,9 +28,11 @@ public class User implements TransferClass{
 	private HttpHost target;
 	private Gson gson;
 
+	private UserData data;
 	private String username;
 	private String password;
 	private int id;
+	private String errorMsg;
 
 	public User() {
 		gson = new Gson();
@@ -48,8 +50,8 @@ public class User implements TransferClass{
 		this.username = username;
 		this.password = password;
 		try {
-			String[] params = {Integer.toString(this.id)};
-			HttpGet req = ConnectionUtilities.getGetRequest("users/view", params, this.username, this.password);
+			String[] params = {username};
+			HttpGet req = ConnectionUtilities.getGetRequest("users/loginTest", params, this.username, this.password);
 			HttpResponse response = httpclient.execute(target, req);
 			
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
@@ -63,7 +65,7 @@ public class User implements TransferClass{
 				sb.append(line);
 			}
 			
-			UserData data = gson.fromJson(sb.toString(), UserData.class);
+			data = gson.fromJson(sb.toString(), UserData.class);
 	
 			if(data == null){
 				return false;
@@ -105,7 +107,7 @@ public class User implements TransferClass{
 				sb.append(line);
 			}
 			
-			UserData data = gson.fromJson(sb.toString(), UserData.class);
+			data = gson.fromJson(sb.toString(), UserData.class);
 			
 			return data;
 
@@ -123,6 +125,43 @@ public class User implements TransferClass{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public boolean usernameAvailable(String username){
+		try {
+			String[] params = {username};
+			HttpGet req = ConnectionUtilities.getGetRequest("users/usernameAvailable", params, null, null);
+			HttpResponse response = httpclient.execute(target, req);
+			
+			BufferedReader rd = new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent()));
+
+			String line = "";
+			
+			StringBuffer sb = new StringBuffer();
+			
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			
+			Available av = gson.fromJson(sb.toString(), Available.class);
+			
+			return av.getAvailable();
+
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public void edit(String username, String password) {
@@ -204,7 +243,7 @@ public class User implements TransferClass{
 				sb.append(line);
 			}
 			
-			UserData data = gson.fromJson(sb.toString(), UserData.class);
+			data = gson.fromJson(sb.toString(), UserData.class);
 			this.id = Integer.parseInt(data.getUser().getUser().getId());
 			return data;
 		} catch (IOException e) {
@@ -238,6 +277,18 @@ public class User implements TransferClass{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public UserData getData() {
+		return data;
+	}
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
 	}
 	
 	

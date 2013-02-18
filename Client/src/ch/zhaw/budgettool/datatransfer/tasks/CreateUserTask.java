@@ -14,6 +14,11 @@ public class CreateUserTask extends AsyncTask<String, String, User> {
 
 	@Override
 	protected User doInBackground(String... params) {
+		if(!user.usernameAvailable(params[0])){
+			user.setErrorMsg("Username not available");
+			return user;
+		}
+		
 		if (user.add(params[0], params[1]) != null) {
 			return user;
 		} else {

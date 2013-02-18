@@ -42,9 +42,11 @@ public class LoginActivity extends Activity implements OnTaskCompleted{
 
 			public void onClick(View v) {
 				
-		    	EditText usernameText, passwordText; 
-		    	usernameText = (EditText) findViewById(R.id.usernameNewAccText);
-		    	passwordText = (EditText) findViewById(R.id.passwordNewAccText);
+		    	EditText usernameText, passwordText;
+		    	usernameText = (EditText) findViewById(R.id.usernameLoginText);
+		    	passwordText = (EditText) findViewById(R.id.passwordLoginText);
+		    	username = usernameText.getText().toString();
+		    	password = passwordText.getText().toString();
 		    	
 		    	User user = new User();
 		    	new LoginTask(user, LoginActivity.this).execute(username, password);
@@ -84,13 +86,18 @@ public class LoginActivity extends Activity implements OnTaskCompleted{
 			if(obj != null){
 				User u = (User)obj;
 				serverId = u.getId();
-			    
-		    	String sql = "INSERT INTO users (serverId, groupId, username, password) VALUES(" + serverId + ", NULL, \"" + username + "\", \"" + password + "\");";
-			    connection.execSQL(sql);
-			    
-			    Intent target = new Intent(LoginActivity.this, StartActivity.class);
-		        startActivity(target);
-	    	}else{
+				
+				String groupId = "NULL";
+				if(u.getData().getUser().getUser().getGroup_id() != null){
+					groupId = u.getData().getUser().getUser().getGroup_id();
+				}
+				
+			    String sql = "INSERT INTO users (serverId, groupId, username, password) VALUES(" + serverId + ", "+ groupId +", \"" + username + "\", \"" + password + "\");";
+				connection.execSQL(sql);
+				
+				Intent target = new Intent(LoginActivity.this, StartActivity.class);
+			    startActivity(target);
+			}else{
 	    		AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
 	    		builder.setMessage(R.string.loginfailed);
 	    		AlertDialog dialog = builder.create();
@@ -99,15 +106,21 @@ public class LoginActivity extends Activity implements OnTaskCompleted{
 		}else if(task == CreateUserTask.class){
 			if(obj != null){
 				User u = (User)obj;
-				serverId = u.getId();
-			    
-		    	String sql = "INSERT INTO users (serverId, groupId, username, password) VALUES(" + serverId + ", NULL, \"" + username + "\", \"" + password + "\");";
-			    connection.execSQL(sql);
-			    
-			    Intent target = new Intent(LoginActivity.this, StartActivity.class);
-		        startActivity(target);
+				if(u.getErrorMsg() == null){
+					serverId = u.getId();
+				    
+			    	String sql = "INSERT INTO users (serverId, groupId, username, password) VALUES(" + serverId + ", NULL, \"" + username + "\", \"" + password + "\");";
+				    connection.execSQL(sql);
+				    
+				    Intent target = new Intent(LoginActivity.this, StartActivity.class);
+			        startActivity(target);
+				}else{
+					AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+		    		builder.setMessage(u.getErrorMsg());
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();
+				}
 	    	}else{
-	    		
 	    		AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
 	    		builder.setMessage(R.string.usercreationfailed);
 	    		AlertDialog dialog = builder.create();

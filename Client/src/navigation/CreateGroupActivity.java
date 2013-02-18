@@ -1,8 +1,8 @@
 package navigation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
@@ -10,15 +10,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import ch.zhaw.budgettool.R;
+import ch.zhaw.budgettool.datatransfer.Group;
+import ch.zhaw.budgettool.datatransfer.TransferClass;
+import ch.zhaw.budgettool.datatransfer.User;
+import ch.zhaw.budgettool.datatransfer.tasks.CreateGroupTask;
+import ch.zhaw.budgettool.datatransfer.tasks.LoginTask;
+import ch.zhaw.budgettool.datatransfer.tasks.OnTaskCompleted;
 import ch.zhaw.database.DatabaseHelper;
+import ch.zhaw.database.UserManagementHelper;
 
-public class CreateGroupActivity extends Activity {
+public class CreateGroupActivity extends Activity implements OnTaskCompleted{
 	
 	private String groupName;
 	private String password;
 	private double budget;
 	private int userId;
 	private int serverId;
+	
+	private UserManagementHelper umh;
+	private User user;
 	
     SQLiteOpenHelper database;
     SQLiteDatabase connection;
@@ -29,6 +39,7 @@ public class CreateGroupActivity extends Activity {
         
         database = DatabaseHelper.getInstance(this);
 	    connection = database.getWritableDatabase();
+	    umh = new UserManagementHelper();
 	    
         setContentView(R.layout.view_create_group);
 
@@ -39,8 +50,7 @@ public class CreateGroupActivity extends Activity {
         createButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-
-		    	userId = getUserId();
+				user = umh.getUserFromDb(connection, CreateGroupActivity.this);
 				
 		    	EditText groupNameText, passwordText, budgetText; 
 		    	groupNameText = (EditText) findViewById(R.id.createGroupnameText);
@@ -50,6 +60,9 @@ public class CreateGroupActivity extends Activity {
 		    	groupName = groupNameText.getText().toString();
 		    	password = passwordText.getText().toString();
 		    	budget = Double.parseDouble(budgetText.getText().toString());
+		    	
+		    	new LoginTask(user, CreateGroupActivity.this).execute(user.getUsername(), user.getPassword());
+		    	
 		    	
 		    	//Prüfen ob Gruppenname bereits vorhanden
 		    	//TODO Pris: Netz 
@@ -70,21 +83,9 @@ public class CreateGroupActivity extends Activity {
         });
     }
     
-    private int getUserId() {
-    	int id = 0;
-
- 	    Cursor user = connection.rawQuery("SELECT * FROM users ORDER BY id LIMIT 1", null);
- 	    
- 	    if (user.getCount() > 0) {
- 	    	user.moveToFirst();
-	    	id = user.getInt(1);
- 	    } else {
- 	    	id = -1;
- 	    }
- 	    
- 	    user.close();
- 	    
- 	    return id;
+    private void createGroup(User user, String groupName, String password, double budget){
+    	Group group = new Group(user);
+    	new CreateGroupTask(group, this).execute(groupName, password, Double.toString(budget));
     }
     
     @Override
@@ -98,4 +99,44 @@ public class CreateGroupActivity extends Activity {
 //    	}
 	    super.onDestroy();
     }
+
+	public void onTaskCompleted(Class task, TransferClass obj) {
+		if(task == LoginTask.class){
+			if(obj == null){
+				//username / password invalid -> logout
+				umh.logoutFromDB(connection, this);
+			}else{
+				createGroup(user, groupName, password, budget);
+			}
+		}else if(task == CreateGroupTask.class){
+			if(obj != null){
+				Group g = (Group)obj;
+				if(g.getErrorMsg() == null){
+					//Server-ID holen
+			    	serverId = g.getId();
+			    	userId = user.getId();
+				    
+			    	String sql = "INSERT INTO groups (serverId, userId, groupname, password, budget) VALUES(" + serverId + ", " + userId + ", \"" + groupName + "\", \"" + password + "\", " + budget + ");";
+				    connection.execSQL(sql);
+				    
+				    String sql2 = "UPDATE users SET groupId = " + serverId + " WHERE serverId = " + userId + ";";
+				    connection.execSQL(sql2);
+				    
+			        Intent target = new Intent(CreateGroupActivity.this, AppNavHomeActivity.class);
+			        startActivity(target);
+				}else{
+					AlertDialog.Builder builder = new AlertDialog.Builder(CreateGroupActivity.this);
+		    		builder.setMessage(g.getErrorMsg());
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();
+				}
+	    	}else{
+	    		AlertDialog.Builder builder = new AlertDialog.Builder(CreateGroupActivity.this);
+	    		builder.setMessage(R.string.groupcreationfailed);
+	    		AlertDialog dialog = builder.create();
+	    		dialog.show();
+	    	}
+		}
+		
+	}
 }

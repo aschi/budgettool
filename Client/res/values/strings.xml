@@ -56,5 +56,6 @@
     <string name="date"></string>
     <string name="loginfailed">Login failed</string>
     <string name="usercreationfailed">User creation failed</string>
+    <string name="groupcreationfailed">Group creation failed</string>
     
 </resources>

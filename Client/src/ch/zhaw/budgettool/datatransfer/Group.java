@@ -18,6 +18,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import ch.zhaw.budgettool.datatransfer.JSONClasses.Available;
 import ch.zhaw.budgettool.datatransfer.JSONClasses.GroupData;
 
 import com.google.gson.Gson;
@@ -32,6 +33,7 @@ public class Group implements TransferClass{
 	private double budget;
 	private int id;
 	private User user;
+	private String errorMsg;
 	
 	public Group(User user) {
 		this.user = user;
@@ -83,6 +85,41 @@ public class Group implements TransferClass{
 		}
 		return null;
 		
+	}
+	
+	public boolean groupNameAvailable(String groupname){
+		try {
+			String[] params = {groupname};
+			HttpGet req = ConnectionUtilities.getGetRequest("groups/groupNameAvailable", params, this.user.getUsername(), this.user.getPassword());
+			HttpResponse response = httpclient.execute(target, req);
+			
+			BufferedReader rd = new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent()));
+
+			String line = "";
+			
+			StringBuffer sb = new StringBuffer();
+			
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			
+			Available av = gson.fromJson(sb.toString(), Available.class);
+			return av.getAvailable();
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public GroupData view(){
@@ -236,4 +273,13 @@ public class Group implements TransferClass{
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+	
+	
 }

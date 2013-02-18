@@ -27,19 +27,7 @@ public class LogoutActivity extends Activity {
 
     	//TODO Pris: Alles auf Server laden 
 	    
-    	String sql = "DELETE FROM users;"; 
-	    connection.execSQL(sql);
-	    
-    	String sql2 = "DELETE FROM groups;"; 
-	    connection.execSQL(sql2);
-	    
-    	String sql3 = "DELETE FROM expenses;"; 
-	    connection.execSQL(sql3);
-	    
-        ActionBarCompat.setDisplayHomeAsUpEnabled(this, true);
-        
-        Intent target = new Intent(this, StartActivity.class);
-        startActivity(target);
+    	
     }
     
     @Override
