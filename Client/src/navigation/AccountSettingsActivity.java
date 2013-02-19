@@ -17,6 +17,7 @@
 package navigation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,10 +28,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import ch.zhaw.budgettool.R;
+import ch.zhaw.budgettool.datatransfer.Group;
+import ch.zhaw.budgettool.datatransfer.TransferClass;
+import ch.zhaw.budgettool.datatransfer.User;
+import ch.zhaw.budgettool.datatransfer.tasks.EditGroupTask;
+import ch.zhaw.budgettool.datatransfer.tasks.EditUserTask;
+import ch.zhaw.budgettool.datatransfer.tasks.LoginTask;
+import ch.zhaw.budgettool.datatransfer.tasks.OnTaskCompleted;
 import ch.zhaw.database.DatabaseHelper;
+import ch.zhaw.database.UserManagementHelper;
 
 
-public class AccountSettingsActivity extends Activity {
+public class AccountSettingsActivity extends Activity implements OnTaskCompleted{
 	
 	private int id = -1;
 	private String username = "";
@@ -39,6 +48,9 @@ public class AccountSettingsActivity extends Activity {
 	private SQLiteOpenHelper database;
 	private SQLiteDatabase connection;
 	
+	private UserManagementHelper umh;
+	private User user;
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +58,9 @@ public class AccountSettingsActivity extends Activity {
 
         database = DatabaseHelper.getInstance(this);
 	    connection = database.getWritableDatabase();
+	    
+	    umh = new UserManagementHelper(connection);
+	    user = umh.getUserFromDb(this);
 	    
         setContentView(R.layout.view_change_settings);
 
@@ -97,13 +112,44 @@ public class AccountSettingsActivity extends Activity {
     	passwordText = (EditText) findViewById(R.id.userpassword_value);
     	username = usernameText.getText().toString();
     	password = passwordText.getText().toString();
-	    
-    	String sql = "UPDATE users SET username=\""+username+"\", password=\""+password+"\" WHERE id = "+id;
-	    connection.execSQL(sql);
 
-    	//TODO Pris: Netz!!!
-	    
-        Intent target = new Intent(this, AppNavHomeActivity.class);
-        startActivity(target);
+    	password = password == null ? "" : password;
+    	
+	    new LoginTask(user, this).execute(user.getUsername(), user.getPassword());
     }
+
+	public void onTaskCompleted(Class task, TransferClass obj) {
+		if(task == LoginTask.class){
+			if(obj == null){
+				//username / password invalid -> logout
+				umh.logoutFromDB(this);
+			}else{
+				//create expense
+				user = (User)obj;
+				
+				new EditUserTask(user, this).execute(username, password);
+			}
+		}else if(task == EditUserTask.class){
+			if(obj != null){
+				User u = (User)obj;
+				if(u.getErrorMsg() == null){
+					String sql = "UPDATE users SET username=\""+username+"\", password=\""+password+"\" WHERE id = "+id;
+				    connection.execSQL(sql);
+				    
+			        Intent target = new Intent(AccountSettingsActivity.this, AppNavHomeActivity.class);
+			        startActivity(target);
+				}else{
+					AlertDialog.Builder builder = new AlertDialog.Builder(AccountSettingsActivity.this);
+		    		builder.setMessage(user.getErrorMsg());
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();
+				}
+			}else{
+	    		AlertDialog.Builder builder = new AlertDialog.Builder(AccountSettingsActivity.this);
+	    		builder.setMessage(R.string.editaccountfailed);
+	    		AlertDialog dialog = builder.create();
+	    		dialog.show();
+			}
+		}
+	}
 }

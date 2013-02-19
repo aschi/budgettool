@@ -159,7 +159,7 @@ public class ExpensesOverviewActivity extends Activity {
 		String userIds = "(";
 
 		Cursor user = connection.rawQuery(
-				"SELECT * FROM users ORDER BY serverId LIMIT 1", null);
+				"SELECT * FROM users ORDER BY serverId", null);
 		boolean first = true;
 		if (user != null) {
 			if (user.moveToFirst()) {

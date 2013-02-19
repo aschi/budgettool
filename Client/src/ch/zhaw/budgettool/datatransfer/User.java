@@ -172,9 +172,11 @@ public class User implements TransferClass{
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 			nameValuePairs.add(new BasicNameValuePair("data[User][username]",
 					username));
-			nameValuePairs.add(new BasicNameValuePair("data[User][new_password]",
-					password));
-
+			if(password != ""){
+				nameValuePairs.add(new BasicNameValuePair("data[User][new_password]",
+						password));
+			}
+			
 			req.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpclient.execute(target, req);
 			

@@ -2,7 +2,6 @@ package ch.zhaw.budgettool.datatransfer.tasks;
 
 import android.os.AsyncTask;
 import ch.zhaw.budgettool.datatransfer.Group;
-import ch.zhaw.budgettool.datatransfer.User;
 
 public class EditGroupTask extends AsyncTask<String, String, Group> {
 	private OnTaskCompleted listener;
@@ -16,16 +15,15 @@ public class EditGroupTask extends AsyncTask<String, String, Group> {
 	@Override
 	protected Group doInBackground(String... params) {
 		//check if groupName is available
-		if(!group.groupNameAvailable(params[0])){
+		if(!group.getGroupname().equals(params[0]) && !group.groupNameAvailable(params[0])){
 			group.setErrorMsg("Groupname not available");
 			return group;
 		}
-		
 		//if so create it
 		group.edit(params[0], params[1], Double.parseDouble(params[2]));
 		return group;
 	}
-
+	
 	protected void onPostExecute(Group group) {
 		listener.onTaskCompleted(EditGroupTask.class, group);
 	}

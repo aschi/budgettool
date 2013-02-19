@@ -24,9 +24,6 @@ public class LogoutActivity extends Activity {
 	    
 	    UserManagementHelper umh = new UserManagementHelper(connection);
 	    
-	    //TODO Pris: Alles auf Server laden 
-	    
-	    
 	    //logout
 	    umh.logoutFromDB(this);
     }

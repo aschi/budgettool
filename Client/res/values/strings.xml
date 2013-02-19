@@ -59,4 +59,6 @@
     <string name="groupcreationfailed">Group creation failed</string>
     <string name="expensecreationfailed">Expense creation failed</string>
     <string name="editgroupfailed">Group data could not be saved</string>
+    <string name="groupjoiningfailed">Unable to join the group</string>
+    <string name="editaccountfailed">Account data could not be saved</string>
 </resources>

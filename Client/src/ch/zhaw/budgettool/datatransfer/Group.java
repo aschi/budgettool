@@ -165,8 +165,11 @@ public class Group implements TransferClass{
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 			nameValuePairs.add(new BasicNameValuePair("data[Group][group_name]",
 					groupname));
-			nameValuePairs.add(new BasicNameValuePair("data[Group][new_password]",
-					password));
+			if(password != ""){
+				nameValuePairs.add(new BasicNameValuePair("data[Group][new_password]",
+						password));	
+			}
+			
 			nameValuePairs.add(new BasicNameValuePair("data[Group][budget]",
 					Double.toString(budget)));
 
@@ -211,6 +214,27 @@ public class Group implements TransferClass{
 		}
 	}
 	
+	public void leaveGroup(){
+		try {
+			String[] params = {Integer.toString(this.id)};
+			HttpPost req = ConnectionUtilities.getPostRequest("groups/leaveGroup", params, this.user.getUsername(), this.user.getPassword());
+			HttpResponse response = httpclient.execute(target, req);
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//
 	public GroupData joinGroup(String groupname, String password){
 		try {
 			HttpPost req = ConnectionUtilities.getPostRequest("groups/joinGroup", null, this.user.getUsername(), this.user.getPassword());
@@ -219,9 +243,10 @@ public class Group implements TransferClass{
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 			nameValuePairs.add(new BasicNameValuePair("data[Group][group_name]",
 					groupname));
+			
 			nameValuePairs.add(new BasicNameValuePair("data[Group][password]",
-					password));
-
+						password));
+			
 			req.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpclient.execute(target, req);
 

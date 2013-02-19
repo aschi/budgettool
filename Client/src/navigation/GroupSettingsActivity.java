@@ -54,6 +54,7 @@ public class GroupSettingsActivity extends Activity implements OnTaskCompleted {
     SQLiteOpenHelper database;
     SQLiteDatabase connection;
     
+    private String oldGroupname;
     private UserManagementHelper umh;
     private User user;
     private Group group;
@@ -66,6 +67,7 @@ public class GroupSettingsActivity extends Activity implements OnTaskCompleted {
         
         database = DatabaseHelper.getInstance(this);
 	    connection = database.getWritableDatabase();
+	    
 
 	    umh = new UserManagementHelper(connection);
 	    user = umh.getUserFromDb(this);
@@ -85,6 +87,7 @@ public class GroupSettingsActivity extends Activity implements OnTaskCompleted {
 	    	EditText mText; 
 	    	mText = (EditText) findViewById(R.id.groupNameText);
 	    	groupName = group.getString(3);
+	    	oldGroupname = groupName;
 	    	mText.setText(groupName);
 	    	EditText mText2; 
 	    	password = group.getString(4);
@@ -108,6 +111,8 @@ public class GroupSettingsActivity extends Activity implements OnTaskCompleted {
 		    	groupName = groupNameText.getText().toString();
 		    	password = passwordgroupText.getText().toString();
 		    	monthlyBudget = Double.parseDouble(monthlyBudgetText.getText().toString());
+		    	
+		    	password = password == null ? "" : password;
 			    
 		    	//check login & initiate data transfer
 				new LoginTask(user, GroupSettingsActivity.this).execute(user.getUsername(), user.getPassword());
@@ -145,18 +150,22 @@ public class GroupSettingsActivity extends Activity implements OnTaskCompleted {
 				user = (User)obj;
 				group = new Group(user);
 				group.setId(serverId);
+				group.setGroupname(oldGroupname);
 				
 				new EditGroupTask(group, this).execute(groupName, password, Double.toString(monthlyBudget));
 			}
 		}else if(task == EditGroupTask.class){
 			if(obj != null){
-				group = (Group)obj;
-				
-				String sql = "UPDATE groups SET groupName=\""+groupName+"\", password=\""+password+"\", budget="+monthlyBudget+" WHERE id = "+id;
-			    connection.execSQL(sql);
+				Group g = (Group)obj;
+				if(g.getErrorMsg() != null){
+					String sql = "UPDATE groups SET groupName=\""+groupName+"\", password=\""+password+"\", budget="+monthlyBudget+" WHERE id = "+id;
+				    connection.execSQL(sql);
+				    
+			        Intent target = new Intent(GroupSettingsActivity.this, AppNavHomeActivity.class);
+			        startActivity(target);
+				}
 			    
-		        Intent target = new Intent(GroupSettingsActivity.this, AppNavHomeActivity.class);
-		        startActivity(target);
+
 			}else{
 	    		AlertDialog.Builder builder = new AlertDialog.Builder(GroupSettingsActivity.this);
 	    		builder.setMessage(R.string.editgroupfailed);

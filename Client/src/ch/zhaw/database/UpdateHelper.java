@@ -30,7 +30,7 @@ public class UpdateHelper {
 		    	if(user != null){
 			    	Cursor c = connection.rawQuery("SELECT id FROM users WHERE serverId = '"+ user.getId() +"' LIMIT 1", null);
 			 	    if (c.getCount() == 0) {
-			 	    	sql = "INSERT INTO users (serverId, groupId, username, password) VALUES(" + user.getId() + ", "+ user.getGroup_id() +", \"" + user.getUsername() + "\", \"" + user.getPassword() + "\");";
+			 	    	sql = "INSERT INTO users (serverId, groupId, username) VALUES(" + user.getId() + ", "+ user.getGroup_id() +", \"" + user.getUsername() + "\");";
 					    connection.execSQL(sql);
 			 	    }
 		    	}
@@ -44,14 +44,14 @@ public class UpdateHelper {
 	 	    if (c.getCount() > 0) {
 	 	    	c.moveToFirst();
 	 	    	int id = c.getInt(c.getColumnIndex("id"));
-	 	    	String sql = "UPDATE groups SET groupName=\""+group.getGroup_name()+"\", password=\""+group.getPassword()+"\", budget="+group.getBudget()+" WHERE id = "+id;
+	 	    	String sql = "UPDATE groups SET groupName=\""+group.getGroup_name()+"\", budget="+group.getBudget()+" WHERE id = "+id;
 	 		    connection.execSQL(sql);
 	 	    }else{
 	 	    	//create new group
 	 	    	String sql = "DELETE FROM groups";
 	 	    	connection.execSQL(sql);
-	 	    	sql = "INSERT INTO groups (serverId, userId, groupname, password, budget) VALUES(" + group.getId() + ", " + group.getUser_id() + ", \"" + group.getGroup_name()+ "\", \"" + group.getPassword() + "\", " + group.getBudget() + ");";
-	 	    	connection.execSQL(sql);
+	 	    	String sql2 = "INSERT INTO groups (serverId, userId, groupname, budget) VALUES(" + group.getId() + ", " + group.getUser_id() + ", \"" + group.getGroup_name()+ "\", " + group.getBudget() + ");";
+	 	    	connection.execSQL(sql2);
 	 	    }
 		}
 	}

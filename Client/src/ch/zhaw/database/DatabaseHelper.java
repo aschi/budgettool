@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "serverId UNSIGNED INTEGER NOT NULL, " +
                     "userId INTEGER NOT NULL, " + 
                     "groupName VARCHAR(255) NOT NULL, " +
-                    "password VARCHAR(40) NOT NULL, " +
+                    "password VARCHAR(40), " +
                     "budget decimal(10,2) NOT NULL)";
 	        System.out.println(sql);
 	        db.execSQL(sql); 
@@ -53,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	        		"serverId UNSIGNED INTEGER NOT NULL, " +
                     "groupId INTEGER, " +
                     "username VARCHAR(255) NOT NULL, " + 
-                    "password VARCHAR(40) NOT NULL)";
+                    "password VARCHAR(40))";
 	        System.out.println(sql);
 	        db.execSQL(sql); 
 	     }
