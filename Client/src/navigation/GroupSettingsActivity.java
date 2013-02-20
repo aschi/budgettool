@@ -157,15 +157,18 @@ public class GroupSettingsActivity extends Activity implements OnTaskCompleted {
 		}else if(task == EditGroupTask.class){
 			if(obj != null){
 				Group g = (Group)obj;
-				if(g.getErrorMsg() != null){
+				if(g.getErrorMsg() == null){
 					String sql = "UPDATE groups SET groupName=\""+groupName+"\", password=\""+password+"\", budget="+monthlyBudget+" WHERE id = "+id;
 				    connection.execSQL(sql);
 				    
 			        Intent target = new Intent(GroupSettingsActivity.this, AppNavHomeActivity.class);
 			        startActivity(target);
+				}else{
+					AlertDialog.Builder builder = new AlertDialog.Builder(GroupSettingsActivity.this);
+		    		builder.setMessage(g.getErrorMsg());
+		    		AlertDialog dialog = builder.create();
+		    		dialog.show();
 				}
-			    
-
 			}else{
 	    		AlertDialog.Builder builder = new AlertDialog.Builder(GroupSettingsActivity.this);
 	    		builder.setMessage(R.string.editgroupfailed);
