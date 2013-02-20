@@ -43,7 +43,7 @@ public class LeaveGroupActivity extends Activity implements OnTaskCompleted {
 
 	    // note we never called setContentView()
 	    
-        new LoginTask(user, this).execute();
+        new LoginTask(user, this).execute(user.getUsername(), user.getPassword());
         
         userId = getUserId();
     	String sql2 = "UPDATE users SET groupId = NULL WHERE serverId = " + userId + ";"; 

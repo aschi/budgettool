@@ -76,7 +76,9 @@ public class Group implements TransferClass{
 			}
 			
 			GroupData data = gson.fromJson(sb.toString(), GroupData.class);
-			this.id = Integer.parseInt(data.getGroup().getGroup().getId());
+			if(data != null && data.getGroup() != null){
+				this.id = Integer.parseInt(data.getGroup().getGroup().getId());
+			}
 			return data;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -264,8 +266,10 @@ public class Group implements TransferClass{
 			GroupData data = gson.fromJson(sb.toString(), GroupData.class);
 			this.groupname = groupname;
 			this.password = password;
-			this.id = Integer.parseInt(data.getGroup().getGroup().getId());
-			this.budget = Double.parseDouble(data.getGroup().getGroup().getBudget());
+			if(data != null&& data.getGroup() != null){
+				this.id = Integer.parseInt(data.getGroup().getGroup().getId());
+				this.budget = Double.parseDouble(data.getGroup().getGroup().getBudget());
+			}
 			return data;
 		} catch (IOException e) {
 			e.printStackTrace();
